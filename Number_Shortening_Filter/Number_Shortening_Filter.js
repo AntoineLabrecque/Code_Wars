@@ -1,20 +1,25 @@
-function shortenNumber(suffixes, base) {
-  return function filter ( items )
+// Antoine Labrecque
+function shortenNumber(suffixesPointer, baseNumber) {
+  /* Algorithm 1: filter ( item )
+   * Replaces the Xth power of a given base.
+   * Parameters:  item ::  the input.
+   * Returns: The input with the Xth power of a given base replaced, or the original input if it is not a number.*/
+  return function filter ( item )
   {
-    // result is the shortened number.
-    var result = '' ;
-    if ( Number ( items ) == items )
+    // resultString is the shortened number.
+    var resultString = '' ;
+    if ( Number ( item ) == item )
     {
-      // suffix is which suffix to use.
-      var suffix = 0 ;
-      for ( ; ( items >= base) && ( suffixes . length > suffix ) ; suffix += 1 )
+      // suffixNumber is which suffix to use.
+      var suffixNumber = 0 ;
+      for ( ; ( item >= baseNumber) && ( suffixesPointer . length > suffixNumber ) ; suffixNumber += 1 )
       {
-        items /= base ;
-        items -= ( items % base ) ;
+        item /= baseNumber ;
+        item -= ( item % baseNumber ) ;
       }
-      items += suffixes [ suffix ] ;
+      item += suffixesPointer [ suffixNumber ] ;
     }
-    result += items ;
-    return result ;
+    resultString += item ;
+    return resultString ;
   }
 }
