@@ -8,16 +8,18 @@ function shortenNumber(suffixesPointer, baseNumber) {
   {
     // resultString is the shortened number.
     var resultString = '' ;
-    if ( Number ( item ) == item )
+    if ( ( Number ( item ) == item ) && ( item != '' ) )
     {
+      item = Number ( item ) ;
+
       // suffixNumber is which suffix to use.
       var suffixNumber = 0 ;
-      for ( ; ( item >= baseNumber) && ( suffixesPointer . length > suffixNumber ) ; suffixNumber += 1 )
+      for ( ; ( item >= baseNumber) && ( suffixesPointer . length > suffixNumber + 1 ) ; suffixNumber += 1 )
       {
         item /= baseNumber ;
-        item -= ( item % baseNumber ) ;
       }
-      item += suffixesPointer [ suffixNumber ] ;
+      item -= item % 1 ;
+      item += '' + suffixesPointer [ suffixNumber ] ;
     }
     resultString += item ;
     return resultString ;
