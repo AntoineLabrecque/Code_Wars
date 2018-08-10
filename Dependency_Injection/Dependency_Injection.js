@@ -9,30 +9,25 @@ var DI = function (dependency) {
 
 // Should return new function with resolved dependencies
 DI.prototype.inject = function (func) {
+  // splitFunctionPointer is the function split up on the character ')'.
   // parametersPointer is an array of the parameters of the function.
-  var parametersPointer = func . toString ( ) . replace ( /.*\(/ , '' ) . split ( ')' , 1 ) ;
-  console.log(parametersPointer);
-  parametersPointer = parametersPointer [ 0 ] . split ( ", " ) ;
-  console.log(parametersPointer);
-  console.log(func.length);
-  do
+  // dependenciesPointer is an array of the dependencies for the function that have been resolved.
+  // bodiesPointer is an array of the bodies of the dependencies for the function that have been resolved.
+  var splitFunctionPointer = func . toString ( ) . split ( ')' ) ,
+      parametersPointer = splitFunctionPointer [ 0 ] . replace ( /.*\(/ , '' ) . split ( ", " ) ,
+      dependenciesPointer = [ ] ,
+      bodiesPointer = [ ] ;
+  splitFunctionPointer . splice ( 0 , 1 ) ;
+  splitFunctionPointer = splitFunctionPointer . join ( ')' ) ;
+  for ( var i = 0 ; i < parametersPointer . length ; i += 1 )
   {
-    threwBoolean = false ;
-    try
-    {
-      func ( ) ;
-    }
-    catch ( e )
-    {
-      dep = e . message . split ( " " , 1 ) ;
-      console.log(dep);
-      this . dependency [ dep [ 0 ] ] ;
-      threwBoolean = true ;
-    }
+    dependenciesPointer . splice ( i , 0 , this . dependency [ parametersPointer [ i ] ] ) ;
+    bodiesPointer . splice ( i , 0 , dependenciesPointer [ i ] . toString ( ) . split ( ')' ) ) ;
+    bodiesPointer [ i ] . splice ( 0 , 1 ) ;
   }
-  while ( !threwBoolean ) ;
-  /* Algorithm 1: resolved ( )
-   * The given function with the dependencies resolved.
-   * Returns: Whatever the given function would have returned when its dependencies are resolved.*/
-  return func ("", this.dependency[dep[0]],"" ) ;
+  console.log(dependenciesPointer);
+  var i = "return \"" ;
+  i = i . concat ( func ( this.dependency[parametersPointer[0]] , this.dependency[parametersPointer[1]] , this.dependency[parametersPointer[2]]).toString() + "\" ;") ;
+  console .log (i);
+  return new Function ( i ) ;
 }
